@@ -1,0 +1,71 @@
+{
+    "status": "ok",
+    "totalResults": 68,
+    "articles": [
+        {
+            "source": {
+                "id": "bloomberg",
+                "name": "Bloomberg"
+            },
+            "author": "Anand Krishnamoorthy",
+            "title": "Trump Tariff Threats Weigh on Asian Risk Appetite: Markets Wrap - Bloomberg.com",
+            "description": "European and US stock futures fell and haven assets such as gold rallied after President Donald Trump proposed new levies on eight countries that have opposed his plans to acquire Greenland. The dollar weakened against most of its major peers.",
+            "url": "https://www.bloomberg.com/news/articles/2026-01-18/trump-tariff-threats-weigh-on-asian-risk-appetite-markets-wrap",
+            "urlToImage": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iEHEpcDLj01Y/v0/1200x675.png",
+            "publishedAt": "2026-01-19T05:15:00Z",
+            "content": "European and US stock futures fell and haven assets such as gold rallied after President Donald Trump proposed new levies on eight countries that have opposed his plans to acquire Greenland. The doll… [+306 chars]"
+        },
+        {
+            "source": {
+                "id": "techcrunch",
+                "name": "TechCrunch"
+            },
+            "author": "Connie Loizos",
+            "title": "Sequoia to invest in Anthropic, breaking VC taboo on backing rivals: FT - TechCrunch",
+            "description": "Sequoia Capital is reportedly joining a blockbuster funding round for Anthropic, the AI startup behind Claude, according to the Financial Times. It's a",
+            "url": "https://techcrunch.com/2026/01/18/sequoia-to-invest-in-anthropic-breaking-vc-taboo-on-backing-rivals-ft/",
+            "urlToImage": "https://techcrunch.com/wp-content/uploads/2016/05/tcdisrupt_ny16-5284.jpg?resize=1200,800",
+            "publishedAt": "2026-01-18T22:15:17Z",
+            "content": "Sequoia Capital is reportedly joining a blockbuster funding round for Anthropic, the AI startup behind Claude, according to the Financial Times. It’s a move sure to turn heads in Silicon Valley.\r\nWhy… [+3575 chars]"
+        },
+        {
+            "source": {
+                "id": null,
+                "name": "Gizmodo.com"
+            },
+            "author": "Mike Pearl",
+            "title": "EPA Rule Clarification Hits a Significant Source of Grok’s Electricity - Gizmodo",
+            "description": "It seems xAI has been taking liberties with gas turbines that federal rules don’t actually tolerate.",
+            "url": "https://gizmodo.com/epa-rule-clarification-hits-a-significant-source-of-groks-electricity-2000711569",
+            "urlToImage": "https://gizmodo.com/app/uploads/2025/12/shutterstock_2396034011-1200x675.jpg",
+            "publishedAt": "2026-01-18T21:40:07Z",
+            "content": "This past summer, activists at the Southern Environmental Law Center (SELC) announced they were going after Elon Musks AI company, xAI, for what it claimed were unpermitted gas turbines that threaten… [+2760 chars]"
+        },
+        {
+            "source": {
+                "id": null,
+                "name": "InsideEVs "
+            },
+            "author": "Suvrat Kothari",
+            "title": "Canada’s Tariff Cut Just Made This High-Tech Chinese EV 50% Cheaper - InsideEVs",
+            "description": "A high-end electric performance SUV that's made in China is about to get dramatically cheaper for Canadians.",
+            "url": "https://insideevs.com/news/784754/lotus-eletre-price-cut-canada-tariff-chinese-evs/",
+            "urlToImage": "https://cdn.motor1.com/images/mgl/9mNGVl/s1/2024-lotus-eletre-s-exterior-front-quarter.jpg",
+            "publishedAt": "2026-01-18T21:01:00Z",
+            "content": "Lotus Technology, the British sports car maker majority-owned by Chinas Geely group, is welcoming Canadas decision to reset its tariff policy thats set to result in a dramatic price reduction for its… [+2547 chars]"
+        },
+        {
+            "source": {
+                "id": null,
+                "name": "TheStreet"
+            },
+            "author": "Kirk O’Neil",
+            "title": "Popular sports apparel retail chain files Chapter 11 bankruptcy - thestreet.com",
+            "description": "The retailer of licensed sports team hats, apparel, and merchandise files for bankruptcy to reorganize its business.",
+            "url": "https://www.thestreet.com/retail/popular-sports-apparel-retail-chain-files-chapter-11-bankruptcy",
+            "urlToImage": "https://www.thestreet.com/.image/w_1200,h_630,g_auto,c_fill/NDA6MDAwMDAwMDAyODQ0MDAz/sports-team-apparel-lead-ko-011826.jpg",
+            "publishedAt": "2026-01-18T20:42:03Z",
+            "content": "Key Points\r\n<ul><li>Sports apparel stores have been closing and shifting online.</li><li>Modells relaunched as an e-commerce brand, hinting at possible brick-and-mortar location return.</li><li>Washi… [+4015 chars]"
+        }
+    ]
+}

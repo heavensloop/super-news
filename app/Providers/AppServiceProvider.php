@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
+use App\Services\News\NewsSourceFactory;
+use App\Services\News\NewsSourceInterface;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Spatie\StructureDiscoverer\Discover;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +18,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $newsSources = Discover::in(app_path('Services/News/Sources'))->implementing(NewsSourceInterface::class)->get();
+
+        foreach ($newsSources as $newsSource) {
+            $this->app->tag($newsSource, NewsSourceInterface::class);
+        }
+
+        $this->app->singleton(NewsSourceFactory::class, function ($app) {
+            return new NewsSourceFactory($app->tagged(NewsSourceInterface::class));
+        });
     }
 
     /**

@@ -2,7 +2,14 @@
 
 namespace App\Services\News;
 
+use App\Enum\NewsSource;
+use App\Services\News\Data\NewsQuery;
+use App\Services\News\Data\NewsResourceCollection;
+
 interface NewsSourceInterface
 {
-    public function fetch(NewsQuery $newsQuery);
+    /** @throws new \RuntimeException */
+    public function fetch(NewsQuery $newsQuery): NewsResourceCollection;
+
+    public function getType(): NewsSource;
 }
