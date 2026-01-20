@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('category');
+            $table->string('source');
             $table->string('url')->unique();
             $table->longText('content')->nullable();
             $table->string('api_source');
             $table->text('description')->nullable();
             $table->string('image_url')->nullable();
-            $table->string('source')->after('category');
             $table->string('author')->nullable();
             $table->timestamp('published_at');
             $table->timestamps();
