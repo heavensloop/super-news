@@ -15,4 +15,7 @@ enum NewsSource: string implements ReadableEnumInterface
 
     #[EnumCase('The Guardian')]
     case THE_GUARDIAN = 'theguardian';
+
+    #[EnumCase('New York Times')]
+    case NEW_YORK_TIMES = 'nytimes';
 }
