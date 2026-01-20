@@ -2,11 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Enum\NewsCategory;
 use App\Enum\NewsSource;
+use App\Services\ArticleImporter;
 use App\Services\News\Data\NewsQuery;
 use App\Services\News\NewsSourceFactory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Psl\Type;
 
 class ProcessNewsImport implements ShouldQueue
 {
@@ -23,15 +26,12 @@ class ProcessNewsImport implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(NewsSourceFactory $newsFactory, ArticleImporter $articleImporter,): void
     {
-        $newsFactory = app(NewsSourceFactory::class);
         $newsSource = $newsFactory->create($this->source);
         $newsCollection = $newsSource->fetch($this->query);
+        $category = Type\instance_of(NewsCategory::class)->assert($this->query->getCategory());
 
-        foreach ($newsCollection->getItems() as $newsItem) {
-            // Here you would typically save the news item to the database.
-            dump("Imported: " . $newsItem->title);
-        }
+        $articleImporter->import($newsCollection, $category, $this->source);
     }
 }

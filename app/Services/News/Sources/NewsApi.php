@@ -2,6 +2,7 @@
 
 namespace App\Services\News\Sources;
 
+use App\Enum\NewsCategory;
 use App\Enum\NewsSource;
 use App\Services\News\Data\NewsQuery;
 use App\Services\News\Data\NewsResource;
@@ -50,16 +51,15 @@ class NewsApi implements NewsSourceInterface
         $response = $this->client->get($url, $queryParams);
         $data = $response->json('articles', []);
 
-        return $this->transFormData($data);
+        return $this->transFormData($data, $newsQuery->getCategory());
     }
 
-    private function transFormData(array $data): NewsResourceCollection
+    private function transFormData(array $data, NewsCategory $newsCategory): NewsResourceCollection
     {
         $collection = new NewsResourceCollection();
 
         foreach ($data as $item) {
-            $newsResource = new NewsResource();
-            $newsResource->setSource($item['source']['id'], $item['source']['name']);
+            $newsResource = new NewsResource($newsCategory, $this->getType());
             $newsResource->setPublishedAt(new \DateTimeImmutable($item['publishedAt']));
             $newsResource->setTitle($item['title'] ?? '');
             $newsResource->setDescription($item['description'] ?? '');

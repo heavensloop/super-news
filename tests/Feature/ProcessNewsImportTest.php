@@ -8,10 +8,11 @@ use App\Jobs\ProcessNewsImport;
 use App\Services\ArticleImporter;
 use App\Services\News\Data\NewsQuery;
 use App\Services\News\Data\NewsResourceCollection;
-use App\Services\News\NewsSourceFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 // TODO: Add more tests for different scenarios
+#[CoversClass(ProcessNewsImport::class)]
 class ProcessNewsImportTest extends TestCase
 {
     public function test_handle(): void
@@ -25,7 +26,7 @@ class ProcessNewsImportTest extends TestCase
 
         $job = new ProcessNewsImport($query, NewsSource::NEWS_API, $articleImporter);
         $job->handle(
-            app(NewsSourceFactory::class),
+            $this->getMockNewsFactory(),
             $articleImporter
         );
     }

@@ -8,7 +8,7 @@ class NewsQuery
 {
     private ?\DateTimeInterface $publishedFrom = null;
     private ?\DateTimeInterface $publishedTo = null;
-    private int $limit = 1000;
+    private int $limit = 100;
 
     public function __construct(private readonly NewsCategory $category)
     {}
@@ -33,7 +33,7 @@ class NewsQuery
         return $this->publishedTo;
     }
 
-    public function getCategory(): ?NewsCategory
+    public function getCategory(): NewsCategory
     {
         return $this->category;
     }

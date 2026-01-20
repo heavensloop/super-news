@@ -2,6 +2,8 @@
 
 namespace App\Services\News\Data;
 
+use App\Enum\NewsCategory;
+use App\Enum\NewsSource;
 use DateTimeInterface;
 
 class NewsResource
@@ -12,9 +14,13 @@ class NewsResource
     public string $content;
     public string $url;
     public string $imageUrl;
-    public ?string $sourceId = null;
-    public ?string $sourceName = null;
     public ?string $author = null;
+
+    public function __construct(
+        private readonly NewsCategory $category,
+        private readonly NewsSource $source
+    )
+    {}
 
     public function setPublishedAt(DateTimeInterface $publishedAt): void
     {
@@ -46,14 +52,18 @@ class NewsResource
         $this->imageUrl = $imageUrl;
     }
 
-    public function setSource(?string $id, ?string $name): void
+    public function getSource(NewsSource $source): NewsSource
     {
-        $this->sourceId = $id;
-        $this->sourceName = $name;
+        return $this->source;
     }
 
     public function setAuthor(?string $author): void
     {
         $this->author = $author;
+    }
+
+    public function getCategory(): NewsCategory
+    {
+        return $this->category;
     }
 }
