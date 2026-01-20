@@ -8,7 +8,7 @@ class NewsQuery
 {
     private ?\DateTimeInterface $publishedFrom = null;
     private ?\DateTimeInterface $publishedTo = null;
-    private int $limit = 100;
+    private int $limit = 1000;
 
     public function __construct(private readonly NewsCategory $category)
     {}

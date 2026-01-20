@@ -34,5 +34,7 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
+    'news' => [
+        'import_start_hour' => env('NEWS_IMPORT_START_HOUR', 1),
+    ],
 ];
