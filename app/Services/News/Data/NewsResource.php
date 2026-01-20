@@ -13,7 +13,7 @@ class NewsResource
     public string $description;
     public string $content;
     public string $url;
-    public string $imageUrl;
+    public ?string $imageUrl;
     public ?string $author = null;
 
     public function __construct(
@@ -47,7 +47,7 @@ class NewsResource
         $this->url = $url;
     }
 
-    public function setImageUrl(string $imageUrl): void
+    public function setImageUrl(?string $imageUrl): void
     {
         $this->imageUrl = $imageUrl;
     }
@@ -65,5 +65,17 @@ class NewsResource
     public function getCategory(): NewsCategory
     {
         return $this->category;
+    }
+
+    public function getHash(): string
+    {
+        $refData = [
+            'title' => $this->title,
+            'publishedAt' => $this->publishedAt->format('Y-m-d H:i:s'),
+            'source' => $this->source->value,
+            'url' => $this->url,
+        ];
+
+        return md5(json_encode($refData));
     }
 }

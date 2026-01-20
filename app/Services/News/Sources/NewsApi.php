@@ -7,15 +7,16 @@ use App\Enum\NewsSource;
 use App\Services\News\Data\NewsQuery;
 use App\Services\News\Data\NewsResource;
 use App\Services\News\Data\NewsResourceCollection;
-use App\Services\News\NewsClient;
+use App\Services\News\Exceptions\InvalidNewsSourceRequestException;
 use App\Services\News\NewsSourceInterface;
+use Illuminate\Support\Facades\Http;
 
 class NewsApi implements NewsSourceInterface
 {
     private string $apiKey ;
     private string $baseUrl;
 
-    public function __construct(private readonly NewsClient $client)
+    public function __construct()
     {
         $this->apiKey = config('sources.newsapi.key');
         $this->baseUrl = rtrim(config('sources.newsapi.base_url'), '/');
@@ -48,7 +49,15 @@ class NewsApi implements NewsSourceInterface
 
         $url = sprintf('%s/top-headlines', rtrim($this->baseUrl));
 
-        $response = $this->client->get($url, $queryParams);
+        $response = Http::get($url, $queryParams);
+
+        if ($response->failed()) {
+            $code = $response->json('code', 'error');
+            $message = $response->json('message', 'An error occurred while fetching news data.');
+
+            throw new InvalidNewsSourceRequestException(sprintf('%s - %s', $code, $message), $this->getType());
+        }
+
         $data = $response->json('articles', []);
 
         return $this->transFormData($data, $newsQuery->getCategory());

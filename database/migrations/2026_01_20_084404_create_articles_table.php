@@ -16,9 +16,10 @@ return new class extends Migration
             $table->string('title');
             $table->string('category');
             $table->string('source');
-            $table->string('url')->unique();
-            $table->longText('content')->nullable();
+            $table->string('url');
             $table->string('api_source');
+            $table->string('reference_hash')->unique();
+            $table->longText('content')->nullable();
             $table->text('description')->nullable();
             $table->string('image_url')->nullable();
             $table->string('author')->nullable();

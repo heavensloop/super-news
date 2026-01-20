@@ -30,6 +30,7 @@ class ArticleImporter
                 'category' => $category,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'reference_hash' => md5($newsItem->getHash()),
             ];
 
             if (count($articles) >= self::BATCH_SIZE) {

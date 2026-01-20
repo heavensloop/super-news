@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
     @property string $description
     @property string $content
     @property string $url
-    @property string $image_url
+    @property ?string $image_url
     @property ?string $author
     @property NewsCategory $category
     @property NewsSource $source

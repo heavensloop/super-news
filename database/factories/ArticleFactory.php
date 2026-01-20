@@ -34,6 +34,7 @@ class ArticleFactory extends Factory
                 collect(NewsSource::cases())
                     ->map(fn(NewsSource $source) => $source->value)->toArray()
             ),
+            'reference_hash' => $this->faker->unique()->md5(),
         ];
     }
 }
