@@ -28,5 +28,6 @@ class Article extends Model
     protected $casts = [
         'category' => NewsCategory::class,
         'source' => NewsSource::class,
+        'published_at' => 'datetime',
     ];
 }

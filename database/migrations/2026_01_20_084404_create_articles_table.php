@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('category');
             $table->string('source');
             $table->string('url');
-            $table->string('api_source');
+            $table->string('news_source')->nullable();
             $table->string('reference_hash')->unique();
             $table->longText('content')->nullable();
             $table->text('description')->nullable();

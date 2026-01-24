@@ -7,8 +7,8 @@ use App\Enum\NewsSource;
 class InvalidNewsSourceRequestException extends \RuntimeException
 {
     public function __construct(
-        protected readonly string $message = "Invalid request to news source API.",
-        protected readonly NewsSource $resourceType
+        string $message = "Invalid request to news source API.",
+        readonly NewsSource $resourceType
     ) {
         parent::__construct(sprintf("%s - Resource Type: %s", $this->message, $this->resourceType::class), 500);
     }

@@ -22,8 +22,8 @@ class ArticleFactory extends Factory
             'published_at' => $this->faker->dateTime(),
             'title' => $this->faker->sentence(),
             'description' => $this->faker->sentence(),
-            'content' => $this->faker->sentences(),
-            'url' => $this->faker->url(),
+            'content' => $this->faker->sentences(asText: true),
+            'url' => $this->faker->unique()->url(),
             'image_url' => $this->faker->imageUrl(),
             'author' => $this->faker->name(),
             'category' => $this->faker->randomElement(

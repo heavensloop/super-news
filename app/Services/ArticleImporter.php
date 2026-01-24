@@ -24,7 +24,7 @@ class ArticleImporter
                 'url' => $newsItem->url,
                 'image_url' => $newsItem->imageUrl,
                 'source' => $source,
-                'api_source' => $source->value,
+                'news_source' => $source->value,
                 'author' => $newsItem->author,
                 'published_at' => $newsItem->publishedAt,
                 'category' => $category,

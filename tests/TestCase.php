@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Enum\NewsSource;
+use App\Models\User;
 use App\Services\News\Data\NewsResourceCollection;
 use App\Services\News\NewsSourceFactory;
 use App\Services\News\NewsSourceInterface;
@@ -39,5 +40,13 @@ abstract class TestCase extends BaseTestCase
         $mock->method('fetch')->willReturn(new NewsResourceCollection($data));
 
         return $mock;
+    }
+
+    protected function createUser(array $overrides = []): User
+    {
+        $user = User::factory()->withTwoFactor()->makeOne($overrides);
+        $user->save();
+
+        return $user;
     }
 }
