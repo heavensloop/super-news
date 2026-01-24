@@ -85,11 +85,17 @@ class UserFilterTest extends TestCase
             'filters' => $filters,
         ]);
 
-        // $response->assertStatus(422);
-
-        // assert the missing type error
-        // assert the invalid structure error
-
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+
+    public function test_get_filters(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $response = $this->getJson('api/v1/user/filters');
+
+        $response->assertStatus(Response::HTTP_OK);
     }
 }

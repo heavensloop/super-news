@@ -4,7 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\FeaturedArticlesController;
+use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\FiltersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,13 +23,13 @@ Route::prefix('v1')->group(function () {
         })->middleware('auth:sanctum');
     });
 
-    Route::get('/articles/featured', [FeaturedArticlesController::class, 'featured']);
-    Route::get('/articles/{article_id}', [FeaturedArticlesController::class, 'show'])
+    Route::get('/articles/featured', [ArticlesController::class, 'featured']);
+    Route::get('/articles/{article_id}', [ArticlesController::class, 'show'])
         ->where('article_id', '[0-9]+\-(\w+\-?)+');
 
     // Setup protected routes for articles
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/articles/filtered', [FeaturedArticlesController::class, 'filtered']);
+        Route::get('/articles/filtered', [ArticlesController::class, 'filtered']);
         Route::put('/user/filters', [FiltersController::class, 'save']);
     });
 });

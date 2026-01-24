@@ -7,7 +7,7 @@ use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class FeaturedArticlesController extends Controller
+class ArticlesController extends Controller
 {
     public function featured()
     {
