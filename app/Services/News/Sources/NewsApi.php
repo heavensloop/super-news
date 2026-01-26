@@ -2,8 +2,11 @@
 
 namespace App\Services\News\Sources;
 
+use App\Enum\ContentStatus;
 use App\Enum\NewsCategory;
 use App\Enum\NewsSource;
+use App\Models\Article;
+use App\Services\News\Crawlers\GenericGenericCrawler;
 use App\Services\News\Data\NewsQuery;
 use App\Services\News\Data\NewsResource;
 use App\Services\News\Data\NewsResourceCollection;
@@ -16,7 +19,7 @@ class NewsApi implements NewsSourceInterface
     private string $apiKey ;
     private string $baseUrl;
 
-    public function __construct()
+    public function __construct(private readonly GenericGenericCrawler $crawler)
     {
         $this->apiKey = config('sources.newsapi.key');
         $this->baseUrl = rtrim(config('sources.newsapi.base_url'), '/');
@@ -81,5 +84,13 @@ class NewsApi implements NewsSourceInterface
         }
 
         return $collection;
+    }
+
+    public function populate(Article $article): void
+    {
+        $data = $this->crawler->scrape($article->url);
+        $article->title = $data['title'];
+        $article->image_url = $data['featured_image'];
+        $article->content_status = ContentStatus::POPULATED;
     }
 }

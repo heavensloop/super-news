@@ -32,6 +32,13 @@ class ProcessNewsImport implements ShouldQueue
         $newsCollection = $newsSource->fetch($this->query);
         $category = Type\instance_of(NewsCategory::class)->assert($this->query->getCategory());
 
-        $articleImporter->import($newsCollection, $category, $this->source);
+        try {
+            logger()->info(sprintf("- Importing %d articles from source.", count($newsCollection->getItems()), $this->source->value));
+            $articleImporter->import($newsCollection, $category, $this->source);
+        } catch (\Exception $e) {
+            // Log the error or handle it as needed
+            logger()->error(sprintf("Failed to import articles from source %s: %s", $this->source->value, $e->getMessage()));
+            throw $e;
+        }
     }
 }

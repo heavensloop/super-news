@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enum\ContentStatus;
 use App\Enum\NewsCategory;
 use App\Enum\NewsSource;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -35,6 +36,16 @@ class ArticleFactory extends Factory
                     ->map(fn(NewsSource $source) => $source->value)->toArray()
             ),
             'reference_hash' => $this->faker->unique()->md5(),
+            'content_status' => ContentStatus::POPULATED,
         ];
+    }
+
+    public static function createPending(): static
+    {
+        return static::new()->state(function (array $attributes) {
+            return [
+                'content_status' => ContentStatus::PENDING,
+            ];
+        });
     }
 }

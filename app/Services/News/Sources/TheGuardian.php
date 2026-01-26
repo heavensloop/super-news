@@ -2,21 +2,25 @@
 
 namespace App\Services\News\Sources;
 
+use App\Enum\ContentStatus;
 use App\Enum\NewsCategory;
 use App\Enum\NewsSource;
+use App\Models\Article;
+use App\Services\CrawlerClient;
 use App\Services\News\Data\NewsQuery;
 use App\Services\News\Data\NewsResource;
 use App\Services\News\Data\NewsResourceCollection;
 use App\Services\News\Exceptions\InvalidNewsSourceRequestException;
 use App\Services\News\NewsSourceInterface;
 use Illuminate\Support\Facades\Http;
+use Symfony\Component\DomCrawler\Crawler;
 
 class TheGuardian implements NewsSourceInterface
 {
     private string $apiKey;
     private string $baseUrl;
 
-    public function __construct()
+    public function __construct(private readonly CrawlerClient $client)
     {
         $this->apiKey = config('sources.theguardian.key');
         $this->baseUrl = rtrim(config('sources.theguardian.base_url'), '/');
@@ -77,5 +81,43 @@ class TheGuardian implements NewsSourceInterface
         }
 
         return $collection;
+    }
+
+    public function populate(Article $article): void
+    {
+        $url = $article->url;
+
+        $response = $this->client->get($url);
+
+        if (200 !== $response->getStatusCode()) {
+            throw new \Exception("Failed to fetch URL: {$url}");
+        }
+
+        $html = (string) $response->getBody();
+
+        $crawler = new Crawler($html);
+        $title = $crawler->filter('h1')->first()->text('');
+
+        $featuredImage = '';
+        $crawler->filter('meta[property="og:image"]')
+            ->each(function ($node) use (&$featuredImage) {
+                $featuredImage = $node->attr('content') ?: '';
+            });
+
+        $content = [];
+
+        $crawler->filter('.article-body-commercial-selector p, .live-blog-body p')
+            ->each(function ($node) use (&$content) {
+                $text = trim($node->text());
+                if ($text) {
+                    $content[] = $text;
+                }
+            });
+
+        $article->image_url = $featuredImage;
+        $article->content = implode("\n\n", $content);
+        $article->content_status = ContentStatus::POPULATED;
+
+        $article->save();
     }
 }

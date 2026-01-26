@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\ContentStatus;
 use App\Enum\NewsCategory;
 use App\Enum\NewsSource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
     @property ?string $author
     @property NewsCategory $category
     @property NewsSource $source
+    @property ContentStatus $content_status
 */
 
 class Article extends Model
@@ -29,5 +31,6 @@ class Article extends Model
         'category' => NewsCategory::class,
         'source' => NewsSource::class,
         'published_at' => 'datetime',
+        'content_status' => ContentStatus::class,
     ];
 }

@@ -16,6 +16,23 @@ class ArticleFilterTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_get_filter_types(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $response = $this->get('/api/v1/filters/types');
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => ['id', 'label', 'inputType' => []],
+            ],
+        ]);
+
+        $this->assertCount(count(FilterType::cases()), $response->collect('data'));
+    }
+
     public function test_query_strings_are_decoded(): void
     {
         Article::factory()->count(5)->create();
@@ -46,17 +63,17 @@ class ArticleFilterTest extends TestCase
 
         $this->assertCount(12, Article::all());
 
-        $settings = [
-            'category' => [NewsCategory::CRIME_JUSTICE, NewsCategory::ENTERTAINMENT],
-            'source' => [NewsSource::THE_GUARDIAN->value, NewsSource::NEWS_API],
-        ];
-
         Article::factory()->createOne(['source' => NewsSource::THE_GUARDIAN->value, 'category' => NewsCategory::CRIME_JUSTICE->value]);
         Article::factory()->createOne(['category' => NewsCategory::ENTERTAINMENT->value]);
         Article::factory()->createOne(['source' => NewsSource::NEWS_API, 'category' => NewsCategory::CRIME_JUSTICE->value]);
         Article::factory()->createOne(['source' => NewsSource::NEWS_API]);
 
         $this->assertCount(16, Article::all());
+
+        $settings = [
+            'category' => [NewsCategory::CRIME_JUSTICE, NewsCategory::ENTERTAINMENT],
+            'source' => [NewsSource::THE_GUARDIAN->value, NewsSource::NEWS_API],
+        ];
 
         $queryString = $this->encodeFiltersToQueryString($settings);
         $response = $this->get('/api/v1/articles/filtered/?filters=' . $queryString);

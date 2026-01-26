@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->text('title');
             $table->string('category');
             $table->string('source');
             $table->string('url');
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('reference_hash')->unique();
             $table->longText('content')->nullable();
             $table->text('description')->nullable();
-            $table->string('image_url')->nullable();
+            $table->text('image_url')->nullable();
             $table->string('author')->nullable();
             $table->timestamp('published_at');
             $table->string('content_status')->default(ContentStatus::PENDING);

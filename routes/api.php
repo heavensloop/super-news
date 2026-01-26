@@ -1,11 +1,12 @@
 <?php
 
+use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\FiltersController;
+use App\Http\Controllers\UserFiltersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,10 @@ Route::prefix('v1')->group(function () {
     // Setup protected routes for articles
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/articles/filtered', [ArticlesController::class, 'filtered']);
-        Route::put('/user/filters', [FiltersController::class, 'save']);
+        Route::get('/filters/types', [FiltersController::class, 'getTypes']);
+
+        Route::get('/user/filters', [UserFiltersController::class, 'index']);
+        Route::put('/user/filters', [UserFiltersController::class, 'save']);
+        Route::patch('/user/filters/{filter}', [UserFiltersController::class, 'update']);
     });
 });

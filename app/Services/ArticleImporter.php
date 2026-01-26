@@ -16,7 +16,16 @@ class ArticleImporter
     {
         $articles = [];
 
+        $existingNewsQuery = Article::query()
+            ->whereIn('reference_hash', array_map(fn ($item) => md5($item->getHash()), $newsCollection->getItems()))
+            ->pluck('reference_hash')
+            ->toArray();
+
         foreach ($newsCollection->getItems() as $newsItem) {
+            if (in_array(md5($newsItem->getHash()), $existingNewsQuery, true)) {
+                continue;
+            }
+
             $articles[] = [
                 'title' => $newsItem->title,
                 'description' => $newsItem->description,

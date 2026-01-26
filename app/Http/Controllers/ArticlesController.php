@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Enum\FilterType;
+use App\Enum\ContentStatus;
 use App\Http\Requests\FilteredArticleRequest;
 use App\Http\Resources\ArticleResource;
 use App\Models\Article;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
+use App\Services\ApplyFilterToQuery;
 use Illuminate\Routing\Controller;
 
 class ArticlesController extends Controller
 {
+    public function __construct(
+        private readonly ApplyFilterToQuery $applyFilterToQuery
+    ) {}
     public function featured()
     {
-        // fetch the latest 12 articles grouped by category
-        $articles = Article::inRandomOrder()
-            ->take(12)
-            ->get();
+        $articles = Article::where('content_status', ContentStatus::POPULATED->value)->inRandomOrder()->take(12)->get();
 
         return ArticleResource::collection($articles);
     }
@@ -25,18 +24,14 @@ class ArticlesController extends Controller
     public function filtered(FilteredArticleRequest $filterRequest)
     {
         $filters = $filterRequest->getFilters();
+        $articleQuery = Article::where('content_status', ContentStatus::POPULATED->value);
 
-        $articleQuery = Article::query();
-
-        foreach(FilterType::cases() as $filterType) {
-            $filterKey = $filterType->value;
-
-            if (isset($filters[$filterKey]) && is_array($filters[$filterKey])) {
-                $articleQuery->orWhere(function(Builder $query) use ($filterKey, $filters) {
-                    $query->whereIn($filterKey, $filters[$filterKey]);
-                });
+        $articleQuery->where(function ($query) use ($filters) {
+            foreach ($filters as $filter) {
+                ['type' => $filterType, 'value' => $value] = $filter;
+                ($this->applyFilterToQuery)($query, $filterType, $value);
             }
-        }
+        });
 
         $articles = $articleQuery->orderBy('id', 'desc')->paginate(12);
 

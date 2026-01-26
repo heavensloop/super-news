@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SaveFilterRequest;
-use App\Models\UserFilter;
+use App\Enum\FilterType;
 
 class FiltersController extends Controller
 {
-    public function save(SaveFilterRequest $request)
+    public function getTypes()
     {
-        $data = $request->validated();
+        $types = collect(FilterType::cases())->map(fn (FilterType $type) => [
+            'id' => $type->value,
+            'label' => $type->getReadable(),
+            'inputType' => $type->getInputType(),
+        ])->values();
 
-        $userFilter = new UserFilter();
-        $userFilter->user_id = $request->user()->id;
-        $userFilter->name = $data['name'];
-        $userFilter->settings = $data['filters'];
-        $userFilter->is_default = $data['is_default'] ?? false;
-        $userFilter->save();
-
-        // Logic to save user filters
-        return response()->json(['message' => 'Filters saved successfully'], 200);
+        return response()->json(['data' => $types], 200);
     }
 }

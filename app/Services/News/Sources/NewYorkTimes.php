@@ -2,21 +2,25 @@
 
 namespace App\Services\News\Sources;
 
+use App\Enum\ContentStatus;
 use App\Enum\NewsCategory;
 use App\Enum\NewsSource;
+use App\Models\Article;
+use App\Services\CrawlerClient;
 use App\Services\News\Data\NewsQuery;
 use App\Services\News\Data\NewsResource;
 use App\Services\News\Data\NewsResourceCollection;
 use App\Services\News\Exceptions\InvalidNewsSourceRequestException;
 use App\Services\News\NewsSourceInterface;
 use Illuminate\Support\Facades\Http;
+use Symfony\Component\DomCrawler\Crawler;
 
 class NewYorkTimes implements NewsSourceInterface
 {
     private string $apiKey;
     private string $baseUrl;
 
-    public function __construct()
+    public function __construct(private readonly CrawlerClient $client)
     {
         $this->apiKey = config('sources.nytimes.key');
         $this->baseUrl = rtrim(config('sources.nytimes.base_url'), '/');
@@ -58,6 +62,39 @@ class NewYorkTimes implements NewsSourceInterface
         return $this->transFormData($data, $newsQuery->getCategory());
     }
 
+    public function populate(Article $article): void
+    {
+        $url = $article->url;
+        $response = $this->client->get($url);
+
+        if (200 !== $response->getStatusCode()) {
+            throw new \Exception("Failed to fetch URL: {$url}");
+        }
+
+        $html = (string) $response->getBody();
+
+        $crawler = new Crawler($html);
+        $title = $crawler->filter('h1')->first()->text();
+        $featuredImage = '';
+        $crawler->filter('meta[property="og:image"]')
+            ->each(function ($node) use (&$featuredImage) {
+                $featuredImage = $node->attr('content') ?: '';
+            });
+
+        $content = $crawler->filter('section[name="articleBody"] p')
+            ->each(function ($node) {
+                return trim($node->text());
+            });
+
+        $content = array_filter($content);
+
+        $article->image_url = $featuredImage;
+        $article->content = implode("\n\n", $content);
+        $article->content_status = ContentStatus::POPULATED;
+
+        $article->save();
+    }
+
     private function transFormData(array $data, NewsCategory $newsCategory): NewsResourceCollection
     {
         $collection = new NewsResourceCollection();
@@ -80,8 +117,8 @@ class NewYorkTimes implements NewsSourceInterface
                     }
                 }
             }
-            $newsResource->setImageUrl($imageUrl);
 
+            $newsResource->setImageUrl($imageUrl);
             $newsResource->setAuthor($item['byline']['original'] ?? null);
 
             $collection->add($newsResource);
