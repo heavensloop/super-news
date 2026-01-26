@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->json('settings');
             $table->boolean('is_default')->default(false);
+            $table->boolean('is_subscribed')->default(true);
             $table->timestamps();
         });
     }

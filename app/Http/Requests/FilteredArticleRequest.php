@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\FilterType;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FilteredArticleRequest extends FormRequest
@@ -25,6 +26,14 @@ class FilteredArticleRequest extends FormRequest
             'filters' => ['string', function($attribute, $value, $fail) {
                 $decoded = json_decode($value, true);
 
+                $types = array_keys($decoded);
+
+                foreach ($types as $type) {
+                    if (!in_array($type, array_map(fn(FilterType $ft) => $ft->value, FilterType::cases()), true)) {
+                        return $fail('The filter type ' . $type . ' is invalid.');
+                    }
+                }
+
                 if (json_last_error() !== JSON_ERROR_NONE) {
                     return $fail('The ' . $attribute . ' must be a valid JSON string.');
                 }
@@ -41,10 +50,20 @@ class FilteredArticleRequest extends FormRequest
     {
         $data = $this->validated();
 
-        if (isset($data['filters'])) {
-            return json_decode($data['filters'], true);
+        if (!isset($data['filters'])) {
+            return [];
         }
 
-        return [];
+        $data = json_decode($data['filters'], true);
+        $filters = [];
+
+        foreach ($data as $key => $value) {
+            $filters[] = [
+                'type' => FilterType::from($key),
+                'value' => $value,
+            ];
+        }
+
+        return $filters;
     }
 }

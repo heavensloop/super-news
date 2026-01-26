@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\ContentStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->string('image_url')->nullable();
             $table->string('author')->nullable();
             $table->timestamp('published_at');
+            $table->string('content_status')->default(ContentStatus::PENDING);
             $table->timestamps();
         });
     }

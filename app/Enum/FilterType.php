@@ -27,7 +27,7 @@ enum FilterType: string implements ReadableEnumInterface
     #[EnumCase(label: 'Date Published', extras: ['inputType' => 'date'])]
     case DATE_PUBLISHED = 'datePublished';
 
-    #[EnumCase(label: 'Published Between', extras: ['inputType' => 'date'])]
+    #[EnumCase(label: 'Published Between', extras: ['inputType' => 'date-range'])]
     case PUBLISHED_BETWEEN = 'publishedBetween';
 
     public function getInputType(): string
